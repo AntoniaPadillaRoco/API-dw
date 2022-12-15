@@ -18,6 +18,13 @@ router.get('/eventos', (req, res) => {
         .catch((error)=>res.json({message:error}));
 })
 
+router.get('/eventos/:name', (req, res) => {
+    const name = req.params.name
+    esquemaEventos.find({titulo:name})
+        .then((data)=>res.json(data))
+        .catch((error)=>res.json({message:error}));
+})
+
 router.post('/eventos/agregar', (req, res) => {
     const evento = esquemaEventos(req.body);
     console.log(evento);
