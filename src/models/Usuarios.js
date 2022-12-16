@@ -17,7 +17,7 @@ const esquemaUsuarios = mongoose.Schema({
         type: String,
         required: true
     },
-    Contrasena: {
+    contrasena: {
         type: String,
         required: true
     },
