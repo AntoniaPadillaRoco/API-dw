@@ -53,4 +53,47 @@ router.post('/eventos/agregar', (req, res) => {
         .catch(error =>res.json({message: error}));
 })
 
+router.put('/reservas', (req, res) => {
+    const {idUsuario, asientosUsuario, tituloEvento, fechaEvento, horaEvento, asientosEvento} = req.body
+
+    esquemaEventos.find({titulo: tituloEvento})
+        .then((data) => {
+            const fechas = data[0].fechas;
+            for (let i = 0; i < fechas.length; i++) {
+                if (fechas[i].fecha === fechaEvento && fechas[i].hora === horaEvento) {
+                    fechas[i] = {
+                        fecha: fechaEvento,
+                        hora: horaEvento,
+                        asientos: asientosEvento
+                    }
+                    esquemaEventos.findOneAndUpdate({titulo: tituloEvento}, {fechas: fechas}, function(err,doc) {
+                        if (err) {
+                            return res.status(500).json({err: err.message});
+                        }
+                        else return res.json({doc, message:'successfully updated!'})
+                    })
+                }
+            }
+        })
+        .catch((error)=>res.json({message:error}));
+
+    esquemaUsuarios
+        .findById(idUsuario)
+        .then((data) => {
+            const asientosReservados = data[0].asientosReservados;
+            asientosReservados.push({
+                evento: tituloEvento,
+                fecha: fechaEvento,
+                hora: horaEvento,
+                asientos: asientosUsuario
+            })
+            esquemaUsuarios.findOneAndUpdate({_id: idUsuario}, {asientosReservados: asientosReservados}, function(err,doc) {
+                if (err) {
+                    return res.status(500).json({err: err.message});
+                } else return res.json({doc, message: 'successfully updated!'})
+            })
+        })
+        .catch((error) => res.json({message: error}))
+});
+
 module.exports = router;
