@@ -24,7 +24,7 @@ router.post('/usuarios/inicioSesion', (req, res) => {
         .catch((error) => res.json({message: error}));
 });
 
-router.get('/users/:id', (req,res) => {
+router.get('/usuarios/:id', (req,res) => {
     const {id} = req.params;
     esquemaUsuarios
         .findById(id)
