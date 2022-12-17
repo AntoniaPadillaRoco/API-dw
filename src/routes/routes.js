@@ -95,7 +95,7 @@ router.put('/reservas', (req, res) => {
         })
         .catch((error) => error2 = error)
 
-    if (response1 !== undefined && response2 !== undefined) res.json({response1, response2, message: 'Reservation successful'})
+    if (response1 !== undefined && response2 !== undefined) res.json({responseEventos: response1, responseUsuarios: response2, message: 'Reservation successful'})
     else if (error1 !== undefined) res.status(500).json({message: error1})
     else if (error2 !== undefined) res.status(500).json({message: error2})
 });
