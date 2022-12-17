@@ -72,7 +72,7 @@ router.put('/reservas', (req, res) => {
                 }
             }
         })
-        .catch((error) => console.log(error));
+        .catch((error) => res.json({message: error}));
 
     esquemaUsuarios
         .findById(idUsuario)
@@ -88,7 +88,9 @@ router.put('/reservas', (req, res) => {
                 if (err) console.log(err)
             })
         })
-        .catch((error) => console.log(error))
+        .catch((error) => res.json({message: error}))
+
+    res.json({message: 'Wena Pelao'})
 });
 
 module.exports = router;
