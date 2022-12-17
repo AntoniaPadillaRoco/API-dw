@@ -55,7 +55,6 @@ router.post('/eventos/agregar', (req, res) => {
 
 router.put('/reservas', (req, res) => {
     const {idUsuario, asientosUsuario, tituloEvento, fechaEvento, horaEvento, asientosEvento} = req.body
-    let response1, response2, error1, error2;
 
     esquemaEventos.find({titulo: tituloEvento})
         .then((data) => {
@@ -69,13 +68,11 @@ router.put('/reservas', (req, res) => {
                     }
                     esquemaEventos.findOneAndUpdate({titulo: tituloEvento}, {fechas: fechas}, function(err,doc) {
                         if (err) console.log(err)
-                        else response1 = doc;
-                        console.log('Mandame esto',doc)
                     })
                 }
             }
         })
-        .catch((error) => error1 = error);
+        .catch((error) => console.log(error));
 
     esquemaUsuarios
         .findById(idUsuario)
@@ -89,15 +86,11 @@ router.put('/reservas', (req, res) => {
             })
             esquemaUsuarios.findOneAndUpdate({_id: idUsuario}, {asientosReservados: asientosReservados}, function(err,doc) {
                 if (err) console.log(err)
-                else response2 = doc;
-                console.log('Y esto', doc)
             })
         })
-        .catch((error) => error2 = error)
+        .catch((error) => console.log(error))
 
-    if (response1 !== undefined && response2 !== undefined) res.json({responseEventos: response1, responseUsuarios: response2, message: 'Reservation successful'})
-    else if (error1 !== undefined) res.status(500).json({message: error1})
-    else if (error2 !== undefined) res.status(500).json({message: error2})
+    res.json({message: 'Updated successfully'})
 });
 
 module.exports = router;
