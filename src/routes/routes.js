@@ -77,7 +77,7 @@ router.put('/reservas', (req, res) => {
     esquemaUsuarios
         .findById(idUsuario)
         .then((data) => {
-            const asientosReservados = data[0].asientosReservados;
+            const asientosReservados = data.asientosReservados;
             asientosReservados.push({
                 evento: tituloEvento,
                 fecha: fechaEvento,
