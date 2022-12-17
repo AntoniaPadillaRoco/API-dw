@@ -55,6 +55,7 @@ router.post('/eventos/agregar', (req, res) => {
 
 router.put('/reservas', (req, res) => {
     const {idUsuario, asientosUsuario, tituloEvento, fechaEvento, horaEvento, asientosEvento} = req.body
+    let response1, response2;
 
     esquemaEventos.find({titulo: tituloEvento})
         .then((data) => {
@@ -68,6 +69,7 @@ router.put('/reservas', (req, res) => {
                     }
                     esquemaEventos.findOneAndUpdate({titulo: tituloEvento}, {fechas: fechas}, function(err,doc) {
                         if (err) console.log(err)
+                        else response1 = doc;
                     })
                 }
             }
@@ -86,11 +88,12 @@ router.put('/reservas', (req, res) => {
             })
             esquemaUsuarios.findOneAndUpdate({_id: idUsuario}, {asientosReservados: asientosReservados}, function(err,doc) {
                 if (err) console.log(err)
+                else response2 = doc;
             })
         })
         .catch((error) => res.json({message: error}))
 
-    res.json({message: 'Wena Pelao'})
+    res.json({response1, response2, message: 'Reservation successful'})
 });
 
 module.exports = router;
