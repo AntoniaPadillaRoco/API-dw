@@ -67,15 +67,12 @@ router.put('/reservas', (req, res) => {
                         asientos: asientosEvento
                     }
                     esquemaEventos.findOneAndUpdate({titulo: tituloEvento}, {fechas: fechas}, function(err,doc) {
-                        if (err) {
-                            return res.status(500).json({err: err.message});
-                        }
-                        else return res.json({doc, message:'successfully updated!'})
+                        if (err) console.log(err)
                     })
                 }
             }
         })
-        .catch((error)=>res.json({message:error}));
+        .catch((error) => console.log(error));
 
     esquemaUsuarios
         .findById(idUsuario)
@@ -88,12 +85,10 @@ router.put('/reservas', (req, res) => {
                 asientos: asientosUsuario
             })
             esquemaUsuarios.findOneAndUpdate({_id: idUsuario}, {asientosReservados: asientosReservados}, function(err,doc) {
-                if (err) {
-                    return res.status(500).json({err: err.message});
-                } else return res.json({doc, message: 'successfully updated!'})
+                if (err) console.log(err)
             })
         })
-        .catch((error) => res.json({message: error}))
+        .catch((error) => console.log(error))
 });
 
 module.exports = router;
