@@ -70,7 +70,7 @@ router.put('/reservas', (req, res) => {
                     esquemaEventos.findOneAndUpdate({titulo: tituloEvento}, {fechas: fechas}, function(err,doc) {
                         if (err) console.log(err)
                         else response1 = doc;
-                        console.log(doc)
+                        console.log('Mandame esto',doc)
                     })
                 }
             }
@@ -90,7 +90,7 @@ router.put('/reservas', (req, res) => {
             esquemaUsuarios.findOneAndUpdate({_id: idUsuario}, {asientosReservados: asientosReservados}, function(err,doc) {
                 if (err) console.log(err)
                 else response2 = doc;
-                console.log(doc)
+                console.log('Y esto', doc)
             })
         })
         .catch((error) => error2 = error)
