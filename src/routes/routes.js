@@ -1,9 +1,32 @@
 const express = require('express');
 const esquemaUsuarios = require("../models/Usuarios");
 const esquemaEventos = require("../models/Eventos");
+const jwt = require('jsonwebtoken');
+const jwt_decode = require('jwt-decode');
 require('dotenv').config();
 
 const router = express.Router();
+
+const checkeoToken = (token) => {
+    const verificacion = jwt.verify(token, process.env.GENERADOR_TOKEN)
+    if (verificacion) return jwt_decode(token);
+    else return null;
+}
+
+router.post('/', (req,res)=> {
+    console.log(req.cookies)
+    if (req.cookies.cookieToken !== undefined) {
+        const id = checkeoToken(req.cookies.cookieToken).informacionToken.ID
+        if (id === null) res.status(401).json({ message: 'Token invalido' });
+        else {
+            esquemaUsuarios
+                .findById(id)
+                .then((data) => res.json(data))
+                .catch((error) => res.json({message: error}))
+        }
+    }
+    else res.status(404).json({ message: 'Token no encontrado' });
+});
 
 router.post('/usuarios/registrar', (req,res) => {
     const usuario = esquemaUsuarios(req.body);
@@ -17,9 +40,11 @@ router.post('/usuarios/inicioSesion', (req, res) => {
 
     esquemaUsuarios.find({correoElectronico: correoElectronico, contrasena: contrasena})
         .then((data) => {
-            //const informacionToken = {ID: data[0]._id}
-            //const token = jwt.sign({aux}, process.env.TOKEN_SECRET);
-            res.send({/*token: token, */data: data})
+            console.log(data)
+            const informacionToken = {ID: data[0]._id}
+            console.log(informacionToken)
+            const token = jwt.sign({informacionToken}, process.env.GENERADOR_TOKEN);
+            res.send({token: token, data: data})
         })
         .catch((error) => res.json({message: error}));
 });
@@ -77,6 +102,7 @@ router.put('/reservas', (req, res) => {
     esquemaUsuarios
         .findById(idUsuario)
         .then((data) => {
+            console.log(data)
             const asientosReservados = data.asientosReservados;
             asientosReservados.push({
                 evento: tituloEvento,

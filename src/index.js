@@ -3,21 +3,24 @@ const mongoose = require('mongoose');
 mongoose.set('strictQuery', false);
 const cors = require('cors');
 const cookieParser = require('cookie-parser')
-require('dotenv').config({path: '../.env'});
+require('dotenv').config();
 
 
 const Routes = require('./routes/routes');
 
 const API = express();
 API.use(cookieParser());
-API.use(cors());
+API.use(cors({
+    credentials: true,
+    origin: "http://23.23.204.103",
+}));
 
 //middleware
 API.use(express.json());
 API.use('/API', Routes);
 
 API.get('/', (req,res)=>{
-    res.send('hello!');
+    res.send(req.cookies);
 });
 
 //mongodb connection
